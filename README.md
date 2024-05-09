@@ -114,4 +114,92 @@ const promise2 = new Promise((res,rej) => {
 
 promise2.then((result) => {console.log(result)}).catch((error) => {console.log(error)})
 
+const callbackPromise = (text, time) => {
+    return new Promise((res, rej)=> {
+        try{
+            // 정상적으로 코드가 실행되면
+            // 비동기 처리
+        setTimeout(()=>{
+            res(text);
+        },time);
+        }catch(e){
+            // 코드가 정상적으로 실행되지 않으면
+            rej(e);
+        }
+    })
+}
+
+callbackPromise("text 0", 1000)
+.then((result)=> {
+    // then은 promise가 성공 하면 전달한 콜백함수 호출
+    console.log(result);
+    return callbackPromise("text 1", 1000); // 반환되는 pormise 객체안에 result값으로 할당한다
+})
+.then((result)=> {
+    console.log(result);
+    return callbackPromise("text 2", 1000);
+})
+.then((result)=> {
+    console.log(result);
+    return callbackPromise("text 3", 1000);
+})
+.catch((result)=>{
+    // catch는 실패가 되면 호출되면 실행되는 콜백 함수
+    console.log(result);
+});
+
+// 대기 -> 응답을 받으면 
+// 서버에서 요청을 받는 경우에도 promise
+// 대기 상태가 끝날때까지 대기 시키고 이후에 정상적으로 응답받은 값을 가지고
+// 데이터를 사용
+
 ```
+
+## async와 await
+> ES8에서 탄생한 문법
+
+```js
+async function () {
+
+}
+
+// async를 붙인 함수는 반환이 Promise
+const asyncFn = async () => {
+    try {
+        // const test1 = callbackPromise("text1", 1000);
+        // Promise 객체의 대기상태
+
+        const test1 = await callbackPromise("text1", 1000);
+        // await 뒤에 promise 대기상태이면 코드를 밑으로 진행 시키지 않는다
+        // Promise 객체의 대기 이후에 처리 결과를 반환
+        console.log(text1);
+
+        const text2 = await callbackPromise("text2", 1000);
+        console.log(text2);
+
+        const text3 = await callbackPromise("text3", 1000);
+        console.log(text3);
+
+        return text1
+    }
+    catch(e){
+        console.log(e);
+    }
+}
+console.log(asyncFn());
+
+async function a() {
+    await asyncFn();
+    console.log("안녕")
+}
+a();
+```
+
+주의할 점
+then
+catch
+-----------
+async await
+// 같이 쓰면 잘 모르고 사용했다.
+
+// 실습 1초마자 1씩 증가되는 비동기 처리를 해서 함수로 작성을 해보자 5까지
