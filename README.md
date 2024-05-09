@@ -113,4 +113,5 @@ const promise2 = new Promise((res,rej) => {
 });
 
 promise2.then((result) => {console.log(result)}).catch((error) => {console.log(error)})
+
 ```
